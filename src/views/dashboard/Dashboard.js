@@ -54,8 +54,26 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 
+import { getUsers } from 'src/services/users'
+
 const Dashboard = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+  const [users, setUsers] = React.useState([])
+
+  const fetchUser = async (data) => {
+    try {
+      const { data: responseData } = await getUsers()
+      console.log(responseData)
+      setUsers(responseData.data.results)
+    } catch (error) {
+      console.log(error)
+      setUsers([])
+    }
+  }
+
+  React.useEffect(() => {
+    fetchUser()
+  }, [])
 
   const progressExample = [
     { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
