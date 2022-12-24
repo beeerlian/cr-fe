@@ -6,6 +6,8 @@ const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 const Orders = React.lazy(() => import('./views/theme/orders/Orders'))
+const Items = React.lazy(() => import('./views/pages/item/Item'))
+const Transactions = React.lazy(() => import('./views/pages/transaction/Transaction'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -60,6 +62,8 @@ const routes = [
   { path: '/register', name: 'Register', element: Register, exact: true },
   { path: '/order', name: 'Order', element: Orders, exact: true },
   { path: '/order/', name: 'Orders', element: Orders },
+  { path: '/item', name: 'Item', element: Items, exact: true },
+  { path: '/transaction', name: 'Transaction', element: Transactions, exact: true },
 ]
 
 export default routes
