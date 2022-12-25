@@ -31,15 +31,15 @@ const _nav = [
     component: CNavTitle,
     name: 'Menu',
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'Register',
+  //   to: '/register',
+  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
-    name: 'Register',
-    to: '/register',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Login',
+    name: 'Logout',
     to: '/login',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },

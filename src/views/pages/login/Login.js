@@ -47,7 +47,7 @@ const Login = () => {
       console.log(loginResponse?.data?.data?.access_token)
       if (loginResponse.data.data.access_token) {
         localStorage.setItem('accessToken', loginResponse.data.data.access_token)
-        navigate('/', { replace: true })
+        navigate('/dashboard', { replace: true })
       } else {
         setLoginResponse({
           ...initialState,
@@ -144,16 +144,8 @@ const Login = () => {
               <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
+                    <h2>Camera Rental</h2>
+                    <p>Aplikasi rental kamera.</p>
                   </div>
                 </CCardBody>
               </CCard>

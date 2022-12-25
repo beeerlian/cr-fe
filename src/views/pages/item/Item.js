@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
 import classNames from 'classnames'
@@ -28,16 +29,57 @@ import {
   CInputGroupText,
   CFormLabel,
   CCardTitle,
+  CFormSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
 
-import { getAllItem } from 'src/services/items'
+import { getAllItem, createItem } from 'src/services/items'
 
-const AddForm = () => {
+const AddForm = ({ onSuccess }) => {
+  const initialState = {
+    data: null,
+    error: null,
+  }
+
+  const [createRes, setCreateRes] = useState(initialState)
+
+  const submit = (e) => {
+    e.preventDefault()
+    console.log(e)
+    onCreateItem({
+      name: e.target.name.value,
+      price: e.target.price.value,
+      status: e.target.status.value,
+    })
+  }
+
+  const onCreateItem = async (body) => {
+    try {
+      const { data: responseData } = await createItem(body)
+      console.log(responseData)
+      setCreateRes({
+        ...initialState,
+        data: responseData.data,
+      })
+    } catch (error) {
+      console.log(error)
+      setCreateRes({
+        ...initialState,
+        error,
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (createRes.data) {
+      onSuccess()
+    }
+  }, [createRes])
+
   return (
     <>
-      <CForm>
+      <CForm onSubmit={submit}>
         <CCol className="justify-content-center">
           <CInputGroup className="mb-3">
             <CRow>
@@ -47,9 +89,9 @@ const AddForm = () => {
               <CFormInput
                 className="px-2 mx-2"
                 placeholder="Eg. Nicon z200"
-                name="item-name"
-                type="item-name"
-                autoComplete="item-name"
+                name="name"
+                type="text"
+                autoComplete="name"
               />
             </CRow>
           </CInputGroup>
@@ -61,7 +103,7 @@ const AddForm = () => {
               <CFormInput
                 className="px-2 mx-2"
                 name="price"
-                type="price"
+                type="number"
                 placeholder="Eg. 500.000"
                 autoComplete="price"
               />
@@ -72,13 +114,17 @@ const AddForm = () => {
               <CRow>
                 <CFormLabel>Status</CFormLabel>
               </CRow>
-              <CFormInput
+              <CFormSelect
                 className="px-2 mx-2"
                 name="status"
-                type="status"
+                type="select"
                 placeholder="Status"
                 autoComplete="Status"
-              />
+              >
+                <option>Status</option>
+                <option value={true}>Tersedia</option>
+                <option value={false}>Dipinjam</option>
+              </CFormSelect>
             </CRow>
           </CInputGroup>
         </CCol>
@@ -109,18 +155,23 @@ const Items = () => {
     }
   }
 
+  const onCreateItemSuccess = () => {
+    setOpenAddModal(false)
+    fetchAllItem()
+  }
+
   React.useEffect(() => {
     fetchAllItem()
   }, [])
 
   return (
     <>
-      <CModal size="xl" visible={openAddModal} onClose={() => setOpenAddModal(false)}>
+      <CModal size="xl" visible={openAddModal}>
         <CModalHeader>
           <CModalTitle>Add Item</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <AddForm />
+          <AddForm onSuccess={onCreateItemSuccess} />
         </CModalBody>
       </CModal>
       <CCard className="mb-4">

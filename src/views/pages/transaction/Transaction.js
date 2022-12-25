@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
 import classNames from 'classnames'
@@ -26,6 +27,8 @@ import {
   CForm,
   CFormInput,
   CInputGroupText,
+  CFormLabel,
+  CFormSelect,
   CCardTitle,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -33,28 +36,103 @@ import { cilPeople } from '@coreui/icons'
 
 import { getAllTransaction } from 'src/services/transaction'
 
-const AddForm = () => {
+const AddForm = ({ onSuccess }) => {
+  // const createInitialState = {
+  //   data: null,
+  //   error: null,
+  // }
+
+  // const initialState = {
+  //   user: [],
+  //   order: [],
+  //   error: null,
+  // }
+
+  // const [createRes, setCreateRes] = useState(createInitialState)
+  // const [initState, setInitState] = useState(initialState)
+
+  // const submit = (e) => {
+  //   e.preventDefault()
+  //   console.log(e)
+  //   onCreateItem({
+  //     order_id: e.target.order_id.value,
+  //     teller_id: e.target.teller_id.value,
+  //   })
+  // }
+
+  // const onCreateItem = async (body) => {
+  //   try {
+  //     const { data: responseData } = await createOrder(body)
+  //     console.log(responseData)
+  //     setCreateRes({
+  //       ...createInitialState,
+  //       data: responseData.data,
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //     setCreateRes({
+  //       ...createInitialState,
+  //       error,
+  //     })
+  //   }
+  // }
+
+  // const fetchInitState = async () => {
+  //   try {
+  //     const { data: itemRes } = await getAllItem()
+  //     const { data: userRes } = await getUsers()
+  //     setInitState({
+  //       ...initialState,
+  //       item: itemRes.data,
+  //       user: userRes.data,
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //     setInitState({
+  //       ...initialState,
+  //       error,
+  //     })
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (initState.error) {
+  //     onSuccess()
+  //   }
+  // }, [initState])
+
+  // useEffect(() => {
+  //   fetchInitState()
+  // }, [])
+
+  // useEffect(() => {
+  //   if (createRes.data) {
+  //     onSuccess()
+  //   }
+  // }, [createRes])
   return (
     <>
       <CForm>
-        <h1>Login</h1>
-        <p className="text-medium-emphasis">Sign In to your account</p>
         <CInputGroup className="mb-3">
-          <CInputGroupText>
-            <CIcon icon={cilPeople} />
-          </CInputGroupText>
-          <CFormInput name="email" type="email" placeholder="Email" autoComplete="email" />
-        </CInputGroup>
-        <CInputGroup className="mb-4">
-          <CInputGroupText>
-            <CIcon icon={cilPeople} />
-          </CInputGroupText>
-          <CFormInput
-            name="password"
-            type="password"
-            placeholder="Password"
-            autoComplete="current-password"
-          />
+          <CRow>
+            <CRow>
+              <CFormLabel>Teller</CFormLabel>
+            </CRow>
+            <CFormSelect
+              className="px-2 mx-2"
+              name="teller_id"
+              type="select"
+              placeholder="Status"
+              autoComplete="Status"
+            >
+              <option>Pilih teller</option>
+              {[].map((user, index) => (
+                <option key={index} value={user.id}>
+                  {user.email}
+                </option>
+              ))}
+            </CFormSelect>
+          </CRow>
         </CInputGroup>
         <CRow>
           <CCol xs={6}>

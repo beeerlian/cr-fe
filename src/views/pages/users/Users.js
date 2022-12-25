@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
 import classNames from 'classnames'
@@ -27,23 +28,145 @@ import {
   CFormInput,
   CInputGroupText,
   CCardTitle,
+  CFormSelect,
+  CAlert,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
 
 import { getUsers } from 'src/services/users'
+import { register } from 'src/services/auth'
 
-const AddForm = () => {
+const AddForm = ({ onSuccess }) => {
+  const initialState = {
+    data: null,
+    error: null,
+  }
+
+  const [createRes, setCreateRes] = useState(initialState)
+
+  const submit = (e) => {
+    e.preventDefault()
+    console.log(e)
+    onCreateItem({
+      name: e.target.name.value,
+      email: e.target.email.value,
+      identity_number: e.target.identity_number.value,
+      identity_type: e.target.identity_type.value,
+      phone: e.target.phone.value,
+      role: e.target.role.value,
+      password: e.target.password.value,
+      address: e.target.address.value,
+    })
+  }
+
+  const onCreateItem = async (body) => {
+    try {
+      const { data: responseData } = await register(body)
+      console.log(responseData)
+      setCreateRes({
+        ...initialState,
+        data: responseData.data,
+      })
+    } catch (error) {
+      console.log(error)
+      setCreateRes({
+        ...initialState,
+        error,
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (createRes.data) {
+      onSuccess()
+    }
+  }, [createRes])
   return (
     <>
-      <CForm>
-        <h1>Login</h1>
-        <p className="text-medium-emphasis">Sign In to your account</p>
+      {createRes.error ? (
+        <CAlert color="danger" className="d-flex align-items-center">
+          <svg className="flex-shrink-0 me-2" width="24" height="24" viewBox="0 0 512 512">
+            <rect
+              width="32"
+              height="176"
+              x="240"
+              y="176"
+              fill="var(--ci-primary-color, currentColor)"
+              className="ci-primary"
+            ></rect>
+            <rect
+              width="32"
+              height="32"
+              x="240"
+              y="384"
+              fill="var(--ci-primary-color, currentColor)"
+              className="ci-primary"
+            ></rect>
+            <path
+              fill="var(--ci-primary-color, currentColor)"
+              d="M274.014,16H237.986L16,445.174V496H496V445.174ZM464,464H48V452.959L256,50.826,464,452.959Z"
+              className="ci-primary"
+            ></path>
+          </svg>
+          <div>
+            {createRes.error?.response?.data?.error || createRes.error?.message || 'Failed'}
+          </div>
+        </CAlert>
+      ) : null}
+      <CForm onSubmit={submit}>
+        <CInputGroup className="mb-3">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormInput name="name" type="text" placeholder="Name" autoComplete="name" />
+        </CInputGroup>
         <CInputGroup className="mb-3">
           <CInputGroupText>
             <CIcon icon={cilPeople} />
           </CInputGroupText>
           <CFormInput name="email" type="email" placeholder="Email" autoComplete="email" />
+        </CInputGroup>
+
+        <CInputGroup className="mb-3">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormSelect name="identity_type" placeholder="Identity Number" autoComplete="email">
+            <option>Select Identity Type</option>
+            <option value={'KTP'}>KTP</option>
+            <option value={'SIM'}>SIM</option>
+            <option value={'STUDENT_CARD'}>Student Card</option>
+            <option value={'KK'}>Student Card</option>
+          </CFormSelect>
+        </CInputGroup>
+        <CInputGroup className="mb-3">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormInput
+            name="identity_number"
+            type="number"
+            placeholder="Identity Number"
+            autoComplete="email"
+          />
+        </CInputGroup>
+        <CInputGroup className="mb-3">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormInput name="phone" type="tel" placeholder="Phone" autoComplete="phone" />
+        </CInputGroup>
+        <CInputGroup className="mb-3">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormSelect name="role" placeholder="Identity Number" autoComplete="email">
+            <option>Select Role</option>
+            <option value={'CUSTOMER'}>CUSTOMER</option>
+            <option value={'ADMIN'}>ADMIN</option>
+            <option value={'SUPER_ADMIN'}>SUPER_ADMIN</option>
+          </CFormSelect>
         </CInputGroup>
         <CInputGroup className="mb-4">
           <CInputGroupText>
@@ -56,10 +179,16 @@ const AddForm = () => {
             autoComplete="current-password"
           />
         </CInputGroup>
+        <CInputGroup className="mb-4">
+          <CInputGroupText>
+            <CIcon icon={cilPeople} />
+          </CInputGroupText>
+          <CFormInput name="address" type="text" placeholder="Address" />
+        </CInputGroup>
         <CRow>
           <CCol xs={6}>
             <CButton type="submit" color="primary" className="px-4">
-              Login
+              Register
             </CButton>
           </CCol>
         </CRow>
@@ -72,7 +201,7 @@ const Users = () => {
   const [openAddModal, setOpenAddModal] = React.useState(false)
   const [orders, setOrders] = React.useState([])
 
-  const fetchAllOrder = async () => {
+  const fetchAllUser = async () => {
     try {
       const { data: responseData } = await getUsers()
       setOrders(responseData.data)
@@ -83,7 +212,7 @@ const Users = () => {
   }
 
   React.useEffect(() => {
-    fetchAllOrder()
+    fetchAllUser()
   }, [])
 
   return (
@@ -93,7 +222,12 @@ const Users = () => {
           <CModalTitle>Add Order</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <AddForm />
+          <AddForm
+            onSuccess={() => {
+              setOpenAddModal(false)
+              fetchAllUser()
+            }}
+          />
         </CModalBody>
       </CModal>
       <CCard className="mb-4">
