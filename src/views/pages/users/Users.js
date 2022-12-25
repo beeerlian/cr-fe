@@ -31,7 +31,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
 
-import { getAllOrder } from 'src/services/order'
+import { getUsers } from 'src/services/users'
 
 const AddForm = () => {
   return (
@@ -68,13 +68,13 @@ const AddForm = () => {
   )
 }
 
-const Orders = () => {
+const Users = () => {
   const [openAddModal, setOpenAddModal] = React.useState(false)
   const [orders, setOrders] = React.useState([])
 
   const fetchAllOrder = async () => {
     try {
-      const { data: responseData } = await getAllOrder()
+      const { data: responseData } = await getUsers()
       setOrders(responseData.data)
     } catch (error) {
       console.log(error)
@@ -98,18 +98,21 @@ const Orders = () => {
       </CModal>
       <CCard className="mb-4">
         <CCardHeader>
-          <CCardTitle>ORDERS</CCardTitle>
+          <CCardTitle>Users</CCardTitle>
         </CCardHeader>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
-                <CTableHeaderCell className="text-center">Order ID</CTableHeaderCell>
-                <CTableHeaderCell>Item Name</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Item Price</CTableHeaderCell>
-                <CTableHeaderCell>Order Date</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Item ID</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Teller ID</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">
+                  <CIcon icon={cilPeople} />
+                </CTableHeaderCell>
+                <CTableHeaderCell>Name</CTableHeaderCell>
+                <CTableHeaderCell>Email</CTableHeaderCell>
+                <CTableHeaderCell>Identity Type</CTableHeaderCell>
+                <CTableHeaderCell>Identity Number</CTableHeaderCell>
+                <CTableHeaderCell>Phone</CTableHeaderCell>
+                <CTableHeaderCell>Role</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -119,25 +122,30 @@ const Orders = () => {
                     <div>{item.id}</div>
                   </CTableDataCell>
                   <CTableDataCell>
-                    <div>{item.item_name}</div>
+                    <div>{item.name}</div>
                     <div className="small text-medium-emphasis"></div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{item.item_price}</div>
+                  <CTableDataCell>
+                    <div>{item.email}</div>
                   </CTableDataCell>
                   <CTableDataCell>
                     <div>
-                      <strong>{item.order_date}</strong>
+                      <strong>{item.identity_type}</strong>
                     </div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
+                  <CTableDataCell>
                     <div>
-                      <strong>{item.teller_id}</strong>
+                      <strong>{item.identity_number}</strong>
                     </div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
+                  <CTableDataCell>
                     <div>
-                      <strong>{item.user_id}</strong>
+                      <strong>{item.phone}</strong>
+                    </div>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <div>
+                      <strong>{item.role}</strong>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -159,4 +167,4 @@ const Orders = () => {
   )
 }
 
-export default Orders
+export default Users

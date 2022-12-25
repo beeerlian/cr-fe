@@ -1,4 +1,5 @@
 import React from 'react'
+import Users from './views/pages/users/Users'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Login = React.lazy(() => import('./views/pages/login/Login'))
@@ -64,6 +65,7 @@ const routes = [
   { path: '/order/', name: 'Orders', element: Orders },
   { path: '/item', name: 'Item', element: Items, exact: true },
   { path: '/transaction', name: 'Transaction', element: Transactions, exact: true },
+  { path: '/user', name: 'User', element: Users, exact: true },
 ]
 
 export default routes

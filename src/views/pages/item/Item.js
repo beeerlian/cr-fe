@@ -101,6 +101,7 @@ const Items = () => {
   const fetchAllItem = async () => {
     try {
       const { data: responseData } = await getAllItem()
+      console.log(responseData.data)
       setItems(responseData.data)
     } catch (error) {
       console.log(error)
@@ -134,11 +135,9 @@ const Items = () => {
                   <CIcon icon={cilPeople} />
                 </CTableHeaderCell>
                 <CTableHeaderCell>Item Name</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Price</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
+                <CTableHeaderCell>Price</CTableHeaderCell>
+                <CTableHeaderCell>Status</CTableHeaderCell>
                 <CTableHeaderCell>Created At</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">User ID</CTableHeaderCell>
-                <CTableHeaderCell>Teller ID</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -148,28 +147,18 @@ const Items = () => {
                     <div>{item.id}</div>
                   </CTableDataCell>
                   <CTableDataCell>
-                    <div>{item.item_name}</div>
+                    <div>{item.name}</div>
                     <div className="small text-medium-emphasis"></div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{item.item_price}</div>
+                  <CTableDataCell>
+                    <div>Rp. {item.price}</div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{item.item_status}</div>
+                  <CTableDataCell>
+                    <div>{item.status ? 'Tersedia' : 'Dipinjam'}</div>
                   </CTableDataCell>
                   <CTableDataCell>
                     <div>
-                      <strong>{item.item_date}</strong>
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>
-                      <strong>{item.teller_id}</strong>
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div>
-                      <strong>{item.user_id}</strong>
+                      <strong>{item.created_at}</strong>
                     </div>
                   </CTableDataCell>
                 </CTableRow>

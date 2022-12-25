@@ -61,6 +61,12 @@ const _nav = [
     to: '/transaction',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Users',
+    to: '/user',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
 ]
 
 export default _nav

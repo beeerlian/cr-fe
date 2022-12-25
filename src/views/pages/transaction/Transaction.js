@@ -75,6 +75,7 @@ const Transactions = () => {
   const fetchAllTransaction = async () => {
     try {
       const { data: responseData } = await getAllTransaction()
+      console.log(responseData)
       setTransaction(responseData.data)
     } catch (error) {
       console.log(error)
@@ -107,40 +108,41 @@ const Transactions = () => {
                 <CTableHeaderCell className="text-center">
                   <CIcon icon={cilPeople} />
                 </CTableHeaderCell>
-                <CTableHeaderCell>Item Name</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Price</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell>Order At</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">User ID</CTableHeaderCell>
-                <CTableHeaderCell>Teller ID</CTableHeaderCell>
+                <CTableHeaderCell>Order ID</CTableHeaderCell>
+                <CTableHeaderCell>Item ID</CTableHeaderCell>
+                <CTableHeaderCell>Total Rental Day</CTableHeaderCell>
+                <CTableHeaderCell>Total Price</CTableHeaderCell>
+                <CTableHeaderCell>Created At</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {transaction.map((item, index) => (
+              {transaction.map((trans, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell className="text-center">
-                    <div>{transaction.id}</div>
+                    <div>{trans.id}</div>
                   </CTableDataCell>
                   <CTableDataCell>
-                    <div>{transaction.transaction_name}</div>
+                    <div>{trans.order_id}</div>
                     <div className="small text-medium-emphasis"></div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{transaction.item_price}</div>
-                  </CTableDataCell>
                   <CTableDataCell>
                     <div>
-                      <strong>{transaction.item_date}</strong>
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>
-                      <strong>{transaction.teller_id}</strong>
+                      <strong>{trans.teller_id}</strong>
                     </div>
                   </CTableDataCell>
                   <CTableDataCell>
                     <div>
-                      <strong>{transaction.user_id}</strong>
+                      <strong>{trans.total_rental_days} day</strong>
+                    </div>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <div>
+                      <strong>{trans.total_price}</strong>
+                    </div>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <div>
+                      <strong>{trans.created_at}</strong>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
