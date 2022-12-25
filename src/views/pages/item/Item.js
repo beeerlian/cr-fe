@@ -26,6 +26,8 @@ import {
   CForm,
   CFormInput,
   CInputGroupText,
+  CFormLabel,
+  CCardTitle,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
@@ -36,29 +38,54 @@ const AddForm = () => {
   return (
     <>
       <CForm>
-        <h1>Login</h1>
-        <p className="text-medium-emphasis">Sign In to your account</p>
-        <CInputGroup className="mb-3">
-          <CInputGroupText>
-            <CIcon icon={cilPeople} />
-          </CInputGroupText>
-          <CFormInput name="email" type="email" placeholder="Email" autoComplete="email" />
-        </CInputGroup>
-        <CInputGroup className="mb-4">
-          <CInputGroupText>
-            <CIcon icon={cilPeople} />
-          </CInputGroupText>
-          <CFormInput
-            name="password"
-            type="password"
-            placeholder="Password"
-            autoComplete="current-password"
-          />
-        </CInputGroup>
+        <CCol className="justify-content-center">
+          <CInputGroup className="mb-3">
+            <CRow>
+              <CRow>
+                <CFormLabel>Item Name</CFormLabel>
+              </CRow>
+              <CFormInput
+                className="px-2 mx-2"
+                placeholder="Eg. Nicon z200"
+                name="item-name"
+                type="item-name"
+                autoComplete="item-name"
+              />
+            </CRow>
+          </CInputGroup>
+          <CInputGroup className="mb-3">
+            <CRow>
+              <CRow>
+                <CFormLabel>Price</CFormLabel>
+              </CRow>
+              <CFormInput
+                className="px-2 mx-2"
+                name="price"
+                type="price"
+                placeholder="Eg. 500.000"
+                autoComplete="price"
+              />
+            </CRow>
+          </CInputGroup>
+          <CInputGroup className="mb-3">
+            <CRow>
+              <CRow>
+                <CFormLabel>Status</CFormLabel>
+              </CRow>
+              <CFormInput
+                className="px-2 mx-2"
+                name="status"
+                type="status"
+                placeholder="Status"
+                autoComplete="Status"
+              />
+            </CRow>
+          </CInputGroup>
+        </CCol>
         <CRow>
-          <CCol xs={6}>
+          <CCol className="justify-content-end">
             <CButton type="submit" color="primary" className="px-4">
-              Login
+              Submit
             </CButton>
           </CCol>
         </CRow>
@@ -96,7 +123,9 @@ const Items = () => {
         </CModalBody>
       </CModal>
       <CCard className="mb-4">
-        <CCardHeader>Item</CCardHeader>
+        <CCardHeader>
+          <CCardTitle>ITEMS</CCardTitle>
+        </CCardHeader>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -107,7 +136,7 @@ const Items = () => {
                 <CTableHeaderCell>Item Name</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Price</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell>Order At</CTableHeaderCell>
+                <CTableHeaderCell>Created At</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">User ID</CTableHeaderCell>
                 <CTableHeaderCell>Teller ID</CTableHeaderCell>
               </CTableRow>

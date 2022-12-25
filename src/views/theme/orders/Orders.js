@@ -26,6 +26,7 @@ import {
   CForm,
   CFormInput,
   CInputGroupText,
+  CCardTitle,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
@@ -96,7 +97,9 @@ const Orders = () => {
         </CModalBody>
       </CModal>
       <CCard className="mb-4">
-        <CCardHeader>Orders</CCardHeader>
+        <CCardHeader>
+          <CCardTitle>ORDERS</CCardTitle>
+        </CCardHeader>
         <CCardBody>
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
@@ -104,10 +107,8 @@ const Orders = () => {
                 <CTableHeaderCell className="text-center">
                   <CIcon icon={cilPeople} />
                 </CTableHeaderCell>
-                <CTableHeaderCell>Item Name</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Price</CTableHeaderCell>
-                <CTableHeaderCell>Order At</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">User ID</CTableHeaderCell>
+                <CTableHeaderCell>User ID</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Item ID</CTableHeaderCell>
                 <CTableHeaderCell>Teller ID</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
