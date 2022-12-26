@@ -23,132 +23,112 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CInputGroup,
-  CForm,
-  CFormInput,
-  CInputGroupText,
-  CFormLabel,
-  CFormSelect,
+  CHeaderDivider,
+  CContainer,
   CCardTitle,
+  CAccordion,
+  CAccordionHeader,
+  CAccordionBody,
+  CAccordionItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
 
-import { getAllTransaction } from 'src/services/transaction'
+import { getAllTransaction, getTransactionById } from 'src/services/transaction'
+import Page500 from '../page500/Page500'
+import Page404 from '../loading/Loading'
 
-const AddForm = ({ onSuccess }) => {
-  // const createInitialState = {
-  //   data: null,
-  //   error: null,
-  // }
+const titleCase = (s) =>
+  s
+    .replace(/^[-_]*(.)/, (_, c) => c.toUpperCase()) // Initial char (after -/_)
+    .replace(/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase()) // First char after each -/_
 
-  // const initialState = {
-  //   user: [],
-  //   order: [],
-  //   error: null,
-  // }
+const DetailContent = ({ id }) => {
+  const initialState = {
+    data: null,
+    error: null,
+  }
 
-  // const [createRes, setCreateRes] = useState(createInitialState)
-  // const [initState, setInitState] = useState(initialState)
+  const [initState, setInitState] = useState(initialState)
 
-  // const submit = (e) => {
-  //   e.preventDefault()
-  //   console.log(e)
-  //   onCreateItem({
-  //     order_id: e.target.order_id.value,
-  //     teller_id: e.target.teller_id.value,
-  //   })
-  // }
+  const fetchInitState = async () => {
+    try {
+      const { data: transResponse } = await getTransactionById(id)
+      console.log(transResponse)
+      setInitState({
+        ...initialState,
+        data: transResponse.data,
+      })
+    } catch (error) {
+      console.log(error)
+      setInitState({
+        ...initialState,
+        error,
+      })
+    }
+  }
 
-  // const onCreateItem = async (body) => {
-  //   try {
-  //     const { data: responseData } = await createOrder(body)
-  //     console.log(responseData)
-  //     setCreateRes({
-  //       ...createInitialState,
-  //       data: responseData.data,
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //     setCreateRes({
-  //       ...createInitialState,
-  //       error,
-  //     })
-  //   }
-  // }
+  useEffect(() => {
+    fetchInitState()
+  }, [])
 
-  // const fetchInitState = async () => {
-  //   try {
-  //     const { data: itemRes } = await getAllItem()
-  //     const { data: userRes } = await getUsers()
-  //     setInitState({
-  //       ...initialState,
-  //       item: itemRes.data,
-  //       user: userRes.data,
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //     setInitState({
-  //       ...initialState,
-  //       error,
-  //     })
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (initState.error) {
-  //     onSuccess()
-  //   }
-  // }, [initState])
-
-  // useEffect(() => {
-  //   fetchInitState()
-  // }, [])
-
-  // useEffect(() => {
-  //   if (createRes.data) {
-  //     onSuccess()
-  //   }
-  // }, [createRes])
+  if (initState.error) {
+    return <Page404></Page404>
+  }
   return (
-    <>
-      <CForm>
-        <CInputGroup className="mb-3">
-          <CRow>
+    <CRow>
+      {Object.keys(initState.data ?? {}).map((key, index) => {
+        if (key !== 'order' || key !== 'teller') {
+          return <DataTile key={index} title={key} value={initState.data?.order[key]} />
+        }
+      })}
+      <CAccordion flush>
+        <CAccordionItem itemKey={1}>
+          <CAccordionHeader>Order</CAccordionHeader>
+          <CAccordionBody>
             <CRow>
-              <CFormLabel>Teller</CFormLabel>
+              <CContainer className="px-4">
+                {Object.keys(initState.data?.order ?? {}).map((key, index) => (
+                  <DataTile key={index} title={key} value={initState.data?.order[key]} />
+                ))}
+              </CContainer>
             </CRow>
-            <CFormSelect
-              className="px-2 mx-2"
-              name="teller_id"
-              type="select"
-              placeholder="Status"
-              autoComplete="Status"
-            >
-              <option>Pilih teller</option>
-              {[].map((user, index) => (
-                <option key={index} value={user.id}>
-                  {user.email}
-                </option>
-              ))}
-            </CFormSelect>
-          </CRow>
-        </CInputGroup>
-        <CRow>
-          <CCol xs={6}>
-            <CButton type="submit" color="primary" className="px-4">
-              Login
-            </CButton>
-          </CCol>
-        </CRow>
-      </CForm>
-    </>
+          </CAccordionBody>
+        </CAccordionItem>
+        <CAccordionItem itemKey={2}>
+          <CAccordionHeader>Teller</CAccordionHeader>
+          <CAccordionBody>
+            <CRow>
+              <CContainer className="px-4">
+                {Object.keys(initState.data?.teller ?? {}).map((key, index) => (
+                  <DataTile key={index} title={key} value={initState.data?.teller[key]} />
+                ))}
+              </CContainer>
+            </CRow>
+          </CAccordionBody>
+        </CAccordionItem>
+      </CAccordion>
+    </CRow>
+  )
+}
+
+const DataTile = ({ title, value }) => {
+  return (
+    <CRow className="py-1" xs={{ gutterX: 5 }}>
+      <CCol>
+        <div className="p-1 ">{titleCase(title)}</div>
+      </CCol>
+      <CCol>
+        <div className="p-1 ">{value}</div>
+      </CCol>
+    </CRow>
   )
 }
 
 const Transactions = () => {
-  const [openAddModal, setOpenAddModal] = React.useState(false)
+  const [openDetailModal, setOpenDetailModal] = React.useState(false)
   const [transaction, setTransaction] = React.useState([])
+  const [selectedTrans, setSelectedTrans] = React.useState(null)
 
   const fetchAllTransaction = async () => {
     try {
@@ -167,12 +147,12 @@ const Transactions = () => {
 
   return (
     <>
-      <CModal size="xl" visible={openAddModal} onClose={() => setOpenAddModal(false)}>
+      <CModal size="xl" visible={openDetailModal} onClose={() => setOpenDetailModal(false)}>
         <CModalHeader>
-          <CModalTitle>Add Transaction</CModalTitle>
+          <CModalTitle>Transaction Detail</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <AddForm />
+          <DetailContent id={selectedTrans?.id} />
         </CModalBody>
       </CModal>
       <CCard className="mb-4">
@@ -191,6 +171,7 @@ const Transactions = () => {
                 <CTableHeaderCell>Total Rental Day</CTableHeaderCell>
                 <CTableHeaderCell>Total Price</CTableHeaderCell>
                 <CTableHeaderCell>Created At</CTableHeaderCell>
+                <CTableHeaderCell>Action</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -215,13 +196,23 @@ const Transactions = () => {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div>
-                      <strong>{trans.total_price}</strong>
+                      <strong>Rp. {trans.total_price}</strong>
                     </div>
                   </CTableDataCell>
                   <CTableDataCell>
                     <div>
                       <strong>{trans.created_at}</strong>
                     </div>
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    <CButton
+                      onClick={() => {
+                        setSelectedTrans(trans)
+                        setOpenDetailModal(true)
+                      }}
+                    >
+                      Detail
+                    </CButton>
                   </CTableDataCell>
                 </CTableRow>
               ))}
@@ -231,7 +222,7 @@ const Transactions = () => {
         <CCardFooter>
           <CButton
             onClick={() => {
-              setOpenAddModal(true)
+              setOpenDetailModal(true)
             }}
           >
             Add
