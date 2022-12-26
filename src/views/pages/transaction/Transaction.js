@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState, createRef } from 'react'
@@ -77,11 +78,6 @@ const DetailContent = ({ id }) => {
   }
   return (
     <CRow>
-      {Object.keys(initState.data ?? {}).map((key, index) => {
-        if (key !== 'order' || key !== 'teller') {
-          return <DataTile key={index} title={key} value={initState.data?.order[key]} />
-        }
-      })}
       <CAccordion flush>
         <CAccordionItem itemKey={1}>
           <CAccordionHeader>Order</CAccordionHeader>
